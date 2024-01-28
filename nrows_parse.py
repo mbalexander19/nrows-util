@@ -3,17 +3,20 @@ import argparse
 import os
 
 '''
-NROWS Data Parser
-v0.1, 27 January 2024
+NROWS Orders Analysis Tool
+v0.1, January 2024
 All rights belong to the U.S. Government.
-POC: Github mbalexander19
+POC: Github mbalexander19 (contact for official email)
 
-Written in Python v3.12.1 with pandas v2.2.0. There is no guarantee of compatibility for prior or future versions.
+Written in Python v3.12.1 with pandas v2.2.0. There is no guarantee of compatibility 
+for prior or future versions.
 
-Note: This code requires knowledge of command line inputs. 
+Note: This code requires understaning of command line inputs to run. There is no GUI. 
 '''
 
-def parse_to_tsv(file_path, output_path = 'nrows_data.csv', write_mode = 'a', include_cancelled = False):
+
+def parse_to_tsv(file_path : str, output_path : str = 'nrows_data.csv', 
+                 write_mode : str = 'a', include_cancelled : bool = False) -> None:
     '''
     Input
     path : 
@@ -28,8 +31,10 @@ def parse_to_tsv(file_path, output_path = 'nrows_data.csv', write_mode = 'a', in
         a bool, False by default, whether or not to include cancelled orders
     
     Output
-    NROWS orders data in tab-separated value form
+        NROWS orders data in tab-separated value form saved to location in output_path.
+        Returns nothing.
     '''
+    
     orders_table = pd.read_html(file_path)[5]
     orders_table = orders_table.drop(0, axis = 1) # remove blank column on left side of table
     names = orders_table.loc[1] # row 1 contains column headers
@@ -51,13 +56,11 @@ def parse_to_tsv(file_path, output_path = 'nrows_data.csv', write_mode = 'a', in
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     
-    parser.add_argument('-in', '--input_path', type = str, default = 'data/nrows_data.html')
-    parser.add_argument('-out', '--output_path', type = str, default = 'nrows_data.csv')
+    parser.add_argument('-i', '--input_path', type = str, default = 'data/nrows_data.html')
+    parser.add_argument('-o', '--output_path', type = str, default = 'nrows_data.csv')
     parser.add_argument('-wm', '--write_mode', type = str, default = 'a')
     parser.add_argument('-canc', '--include_cancelled', action = 'store_true', default = False)
-    parser.add_argument('-p', '--parse_html', action = 'store_true')
     
     args = parser.parse_args()
     
-    if args.parse_html:
-        parse_to_tsv(args.input_path, args.output_path, args.write_mode, args.include_cancelled)
+    parse_to_tsv(args.input_path, args.output_path, args.write_mode, args.include_cancelled)
