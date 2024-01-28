@@ -18,3 +18,5 @@ Planned future features:
 3. Input a planning functionality
 
 Contributions or feature requests from other users are welcome, but remember that I am doing this part time and (mostly) without pay. If you do use this, please send me a message with your name and unit - both to add you to the COI and for my own FITREP metrics :).
+
+Please do NOT push any PII to this repo or transmit any real-world data outside of official U.S. Government communications channels. I intend to keep this public for widest availability, but that also means it is open to the entire internet. If you need to pass data for some reason (such as an example for a new feature or fix), please keep the format only and generate fake inputs for all fields.
