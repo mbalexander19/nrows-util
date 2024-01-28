@@ -124,7 +124,6 @@ def daycount(orders_tsv : str, start_date : str, end_date : str, type : str) -> 
 
 
 if __name__ == '__main__':
-    #print(daycount('nrows_data.csv', start_date='20240101', end_date = '20240131'))
     
     parser = argparse.ArgumentParser()
     
