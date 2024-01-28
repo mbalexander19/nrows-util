@@ -41,6 +41,7 @@ def date_range(df : pd.DataFrame, start : pd.Timestamp, end : pd.Timestamp) -> p
     # remove all rows outside of date bounds
     df = df.drop(df[(df['Start Date'] > df['End Date'])].index)
     
+    # calculate day count within range
     df['Total Days'] = (df['End Date'] - df['Start Date']).dt.days + 1
     return df
 
@@ -50,8 +51,9 @@ one-liners but are broken out separately for ease of updating and re-use in othe
 '''
 
 def coarse_orders(df : pd.DataFrame) -> pd.DataFrame:
-    order_map = {'AT' : 'AT', 'AD' : 'ADT', 'ID' : 'IDTT'}
-    df['Order Type'] = df['Order Type'].str.slice(stop = 2).map(order_map)
+    # Map AT, ADT, IDTT, ADOS, and MOB. First 3 characters must be exactly as shown, case-sensitive.
+    order_map = {'AT-' : 'AT', 'ADT' : 'ADT', 'ID' : 'IDT', 'MOB' : 'MOB', 'ADO' : 'ADOS'}
+    df['Order Type'] = df['Order Type'].str.slice(stop = 3).map(order_map)
     return df.groupby(['Order Type'])['Total Days'].sum()
 
 
