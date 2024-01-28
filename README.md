@@ -10,7 +10,7 @@ Written in Python v3.12.1 with pandas v2.2.0. There is no guarantee of compatibi
 
 This is a utility for parsing and analyzing U.S. Navy Reserve orders data (AT/ADT/IDTT) for inclusion in monthly ops reports. You will need your own data from NROWS (HTML - just save the output of your query) to use this. The primary audience is unit N3s who want to save a bit of time while increasing accuracy on their reporting.
 
-Mob/ADOS orders could be analyzed as well, it would just required manual data input.
+Mob/ADOS orders could be analyzed as well but would require manual data input.
 
 Planned future features:
 1. Integration of report parsing and analysis (i.e., get straight from NROWS data to output with one command)
