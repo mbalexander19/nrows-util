@@ -52,7 +52,7 @@ one-liners but are broken out separately for ease of updating and re-use in othe
 
 def coarse_orders(df : pd.DataFrame) -> pd.DataFrame:
     # Map AT, ADT, IDTT, ADOS, and MOB. First 3 characters must be exactly as shown, case-sensitive.
-    order_map = {'AT-' : 'AT', 'ADT' : 'ADT', 'ID' : 'IDT', 'MOB' : 'MOB', 'ADO' : 'ADOS'}
+    order_map = {'AT-' : 'AT', 'ADT' : 'ADT', 'IDT' : 'IDTT', 'MOB' : 'MOB', 'ADO' : 'ADOS'}
     df['Order Type'] = df['Order Type'].str.slice(stop = 3).map(order_map)
     return df.groupby(['Order Type'])['Total Days'].sum()
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     
-    out = daycount(args.input, args.start_date, args.end_date, args.type_aggregation, index = False)
+    out = daycount(args.input, args.start_date, args.end_date, args.type_aggregation)
     
     if args.output is not None:
         out.to_csv(args.output, sep = '\t', mode = args.write_mode)
