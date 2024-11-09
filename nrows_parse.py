@@ -1,10 +1,11 @@
 import pandas as pd
 import argparse
 import os
+from typing import List
 
 '''
 NROWS Orders Analysis Tool
-v0.1, January 2024
+v0.2, Nopvember 2024
 All rights belong to the U.S. Government.
 POC: Github mbalexander19 (contact for official email)
 
@@ -19,8 +20,9 @@ def parse_to_tsv(file_path : str, output_path : str = 'nrows_data.csv',
                  write_mode : str = 'a', include_cancelled : bool = False) -> None:
     '''
     Input
-    path : 
-        a str, the path of the saved NROWS HTML page
+    file_path : 
+        a str, either the individual file to be parsed or a directory containing multiple
+        files for processing
     output_path : 
         a str, the file path of the csv output; nrows_data.csv by default
     write_mode : 
@@ -34,24 +36,39 @@ def parse_to_tsv(file_path : str, output_path : str = 'nrows_data.csv',
         NROWS orders data in tab-separated value form saved to location in output_path.
         Returns nothing.
     '''
+    if os.path.isdir(file_path):
+        files = [os.path.join(file_path, i) for i in os.listdir(file_path)
+                 if os.path.isfile(os.path.join(file_path, i)) 
+                 and i.endswith('.html')]
+    elif os.path.isfile(file_path) and file_path.endwith('.html'):
+        files = [file_path]
+    else:
+        raise Exception('File path must be either directory or single HTML file.')
+
+    orders = pd.DataFrame()
+    names = pd.Series()
     
-    orders_table = pd.read_html(file_path)[5]
-    orders_table = orders_table.drop(0, axis = 1) # remove blank column on left side of table
-    names = orders_table.loc[1] # row 1 contains column headers
-    orders_table = orders_table.drop([0,1], axis = 0) # remove blank row 0 and headers
-    orders_table.columns = names # set column names
+    for f in files:
+        orders_table = pd.read_html(f)[5]
+        orders_table = orders_table.drop(0, axis = 1) # remove blank column on left side of table
+        if names.empty:
+            names = orders_table.loc[1] # row 1 contains column headers
+        orders_table = orders_table.drop([0,1], axis = 0) # remove blank row 0 and headers
+        orders = pd.concat([orders, orders_table], ignore_index = True)
+    
+    orders.columns = names
 
     # remove cancelled orders if desired
     if not include_cancelled:
-        orders_table = orders_table.loc[orders_table['Status'] != 'CANCEL']
-    
+        orders = orders.loc[orders['Status'] != 'CANCEL']
+
     if write_mode == 'a':
         write_header = not(os.path.exists(output_path))
     else:
         write_header = True
     
     # write to tab-separate values
-    orders_table.to_csv(output_path, sep = '\t', mode = write_mode, index = False, header = write_header)
+    orders.to_csv(output_path, sep = '\t', mode = write_mode, index = False, header = write_header)
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

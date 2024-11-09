@@ -1,4 +1,8 @@
+*.csv
+*.html
+*.pyc
 data/
+*_files/
 nrows_2_20240127_files/pagerNext.gif
 nrows_1_20240127.html
 nrows_2_20240127.html
