@@ -40,7 +40,7 @@ def parse_to_tsv(file_path : str, output_path : str = 'nrows_data.csv',
         files = [os.path.join(file_path, i) for i in os.listdir(file_path)
                  if os.path.isfile(os.path.join(file_path, i)) 
                  and i.endswith('.html')]
-    elif os.path.isfile(file_path) and file_path.endwith('.html'):
+    elif os.path.isfile(file_path) and file_path.endswith('.html'):
         files = [file_path]
     else:
         raise Exception('File path must be either directory or single HTML file.')
